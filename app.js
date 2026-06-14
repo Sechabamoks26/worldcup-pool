@@ -5,8 +5,8 @@ const PARTICIPANTS = {
   Kekesto: ["Argentina", "IR Iran", "South Africa", "Tunisia", "Cape Verde", "Panama"],
   Latita: ["Australia", "France", "Canada", "Sweden", "DR Congo", "Switzerland"],
   Lwandle: ["Ghana", "Korea Republic", "Brazil", "Uruguay", "Ivory Coast", "Austria"],
-  Sechaba: ["Colombia", "Germany", "Norway", "Iraq", "Türkiye", "Bosnia and Herzegovina"],
-  Thato: ["Mexico", "England", "Qatar", "Haiti", "Japan", "Uzbekistan"],
+  Sechaba: ["Colombia", "Germany", "Norway", "Uzbekistan", "Türkiye", "Bosnia and Herzegovina"],
+  Thato: ["Mexico", "England", "Qatar", "Haiti", "Japan", "Iraq"],
 };
 
 const TEAM_ALIASES = {
