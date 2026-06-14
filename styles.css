@@ -326,6 +326,13 @@ body {
   box-shadow: 0 1px 3px rgba(0,0,0,0.3);
 }
 
+.team-pill__grp {
+  margin-left: 0.1rem;
+  font-size: 0.68rem;
+  font-weight: 600;
+  color: var(--muted);
+}
+
 .team-pill__pts {
   margin-left: 0.15rem;
   font-size: 0.75rem;

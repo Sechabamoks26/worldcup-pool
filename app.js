@@ -1,12 +1,27 @@
 const PARTICIPANTS = {
   "Sandile Duba": ["Portugal", "Ecuador", "Belgium", "Saudi Arabia", "Algeria", "Czechia"],
-  Dofa: ["Scotland", "Morocco", "Spain", "Paraguay", "Egypt", "New Zealand"],
-  Phillip: ["Senegal", "USA", "Netherlands", "Curaçao", "Croatia", "Jordan"],
+  Dofa: ["Scotland", "Senegal", "Spain", "Paraguay", "Egypt", "Switzerland"],
+  Phillip: ["Morocco", "USA", "Netherlands", "Curaçao", "Croatia", "Jordan"],
   Kekesto: ["Argentina", "IR Iran", "South Africa", "Tunisia", "Cape Verde", "Panama"],
-  Latita: ["Australia", "France", "Canada", "Sweden", "DR Congo", "Switzerland"],
-  Lwandle: ["Ghana", "Korea Republic", "Brazil", "Uruguay", "Ivory Coast", "Austria"],
-  Sechaba: ["Colombia", "Germany", "Norway", "Uzbekistan", "Türkiye", "Bosnia and Herzegovina"],
+  Latita: ["Australia", "France", "Canada", "New Zealand", "DR Congo", "Sweden"],
+  Lwandle: ["Ghana", "Korea Republic", "Brazil", "Uruguay", "Ivory Coast", "Uzbekistan"],
+  Sechaba: ["Colombia", "Germany", "Norway", "Austria", "Türkiye", "Bosnia and Herzegovina"],
   Thato: ["Mexico", "England", "Qatar", "Haiti", "Japan", "Iraq"],
+};
+
+const TEAM_GROUPS = {
+  Mexico: "A", "South Africa": "A", "Korea Republic": "A", Czechia: "A",
+  Canada: "B", "Bosnia and Herzegovina": "B", Qatar: "B", Switzerland: "B",
+  Brazil: "C", Morocco: "C", Scotland: "C", Haiti: "C",
+  USA: "D", Paraguay: "D", Türkiye: "D", Australia: "D",
+  Germany: "E", Ecuador: "E", "Ivory Coast": "E", "Curaçao": "E",
+  Netherlands: "F", Japan: "F", Sweden: "F", Tunisia: "F",
+  Belgium: "G", "IR Iran": "G", Egypt: "G", "New Zealand": "G",
+  Spain: "H", Uruguay: "H", "Saudi Arabia": "H", "Cape Verde": "H",
+  France: "I", Senegal: "I", Norway: "I", Iraq: "I",
+  Argentina: "J", Austria: "J", Algeria: "J", Jordan: "J",
+  Portugal: "K", Colombia: "K", "DR Congo": "K", Uzbekistan: "K",
+  England: "L", Croatia: "L", Ghana: "L", Panama: "L",
 };
 
 const TEAM_ALIASES = {
@@ -190,6 +205,20 @@ function normalizeTeam(name) {
   return trimmed;
 }
 
+function teamGroup(team) {
+  return TEAM_GROUPS[normalizeTeam(team)] || "?";
+}
+
+function validateParticipantGroups() {
+  for (const [name, teams] of Object.entries(PARTICIPANTS)) {
+    const groups = teams.map(teamGroup);
+    const dupes = groups.filter((g, i) => groups.indexOf(g) !== i);
+    if (dupes.length) {
+      console.warn(`Group conflict for ${name}: duplicate groups ${[...new Set(dupes)].join(", ")}`);
+    }
+  }
+}
+
 function flagUrl(team) {
   const code = FLAG_CODES[normalizeTeam(team)] || FLAG_CODES[team];
   return code ? `https://flagcdn.com/w40/${code}.png` : null;
@@ -299,7 +328,7 @@ function renderCards() {
     const teamsHtml = row.teams.map((t) => {
       const url = flagUrl(t);
       const img = url ? `<img src="${url}" alt="" loading="lazy" />` : "";
-      return `<span class="team-pill">${img}${escapeHtml(t)}<span class="team-pill__pts">${row.breakdown[t]}pts</span></span>`;
+      return `<span class="team-pill">${img}${escapeHtml(t)}<span class="team-pill__grp">Grp ${teamGroup(t)}</span><span class="team-pill__pts">${row.breakdown[t]}pts</span></span>`;
     }).join("");
 
     const fixturesHtml = displayFixtures.length
@@ -538,6 +567,7 @@ $("#showAllBtn").addEventListener("click", () => {
 });
 
 renderAll();
+validateParticipantGroups();
 setupShare();
 fetchLiveData();
 setInterval(fetchLiveData, 5 * 60 * 1000);
