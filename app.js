@@ -1,8 +1,8 @@
 const PARTICIPANTS = {
-  "Sandile Duba": ["Portugal", "Ecuador", "Belgium", "Saudi Arabia", "Austria", "Czechia"],
+  "Sandile Duba": ["Portugal", "Ecuador", "Belgium", "Saudi Arabia", "Jordan", "Czechia"],
   Dofa: ["Scotland", "Senegal", "Spain", "Paraguay", "Egypt", "Switzerland"],
-  Phillip: ["Morocco", "USA", "Netherlands", "Curaçao", "Croatia", "Jordan"],
-  Kekesto: ["Argentina", "IR Iran", "South Africa", "Tunisia", "Cape Verde", "Panama"],
+  Phillip: ["Morocco", "USA", "Netherlands", "Curaçao", "Panama", "Austria"],
+  Kekesto: ["Argentina", "IR Iran", "South Africa", "Tunisia", "Cape Verde", "Croatia"],
   Latita: ["Australia", "France", "Canada", "New Zealand", "DR Congo", "Sweden"],
   Lwandle: ["Ghana", "Korea Republic", "Brazil", "Uruguay", "Ivory Coast", "Uzbekistan"],
   Sechaba: ["Colombia", "Germany", "Norway", "Algeria", "Türkiye", "Qatar"],
