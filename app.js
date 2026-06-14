@@ -462,7 +462,7 @@ function siteUrl() {
 
 function setupShare() {
   const url = siteUrl();
-  const text = encodeURIComponent(`Check out our World Cup 2026 pool — teams, fixtures & standings:\n${url}`);
+  const text = encodeURIComponent(`Check out Rival Room — World Cup 2026 teams, fixtures & standings:\n${url}`);
   $("#shareBtn").href = `https://wa.me/?text=${text}`;
 
   $("#copyLinkBtn").addEventListener("click", async () => {
