@@ -1,12 +1,12 @@
 const PARTICIPANTS = {
-  "Sandile Duba": ["Portugal", "Ecuador", "Belgium", "Saudi Arabia", "Algeria", "Czechia"],
+  "Sandile Duba": ["Portugal", "Ecuador", "Belgium", "Saudi Arabia", "Austria", "Czechia"],
   Dofa: ["Scotland", "Senegal", "Spain", "Paraguay", "Egypt", "Switzerland"],
   Phillip: ["Morocco", "USA", "Netherlands", "Curaçao", "Croatia", "Jordan"],
   Kekesto: ["Argentina", "IR Iran", "South Africa", "Tunisia", "Cape Verde", "Panama"],
   Latita: ["Australia", "France", "Canada", "New Zealand", "DR Congo", "Sweden"],
   Lwandle: ["Ghana", "Korea Republic", "Brazil", "Uruguay", "Ivory Coast", "Uzbekistan"],
-  Sechaba: ["Colombia", "Germany", "Norway", "Austria", "Türkiye", "Bosnia and Herzegovina"],
-  Thato: ["Mexico", "England", "Qatar", "Haiti", "Japan", "Iraq"],
+  Sechaba: ["Colombia", "Germany", "Norway", "Algeria", "Türkiye", "Qatar"],
+  Thato: ["Mexico", "England", "Bosnia and Herzegovina", "Haiti", "Japan", "Iraq"],
 };
 
 const TEAM_GROUPS = {
