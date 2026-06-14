@@ -14,11 +14,12 @@ const TEAM_ALIASES = {
   "IR Iran": ["Iran", "IR Iran", "IRN"],
   Türkiye: ["Turkiye", "Türkiye", "Turkey", "TUR"],
   USA: ["USA", "United States", "USMNT", "United States of America"],
+  Czechia: ["Czechia", "Czech Republic", "CZE"],
+  "DR Congo": ["DR Congo", "Congo DR", "Democratic Republic of the Congo", "Democratic Republic of Congo"],
+  "Curaçao": ["Curaçao", "Curacao", "Cura\u00e7ao"],
   "Bosnia and Herzegovina": ["Bosnia and Herzegovina", "Bosnia & Herz.", "Bosnia & Herzegovina"],
   "Ivory Coast": ["Ivory Coast", "Côte d'Ivoire", "Cote d'Ivoire"],
-  "Curaçao": ["Curaçao", "Curacao"],
   "Cape Verde": ["Cape Verde", "Cabo Verde"],
-  "DR Congo": ["DR Congo", "Congo DR", "Democratic Republic of the Congo"],
 };
 
 const FLAG_CODES = {
@@ -41,9 +42,9 @@ const FALLBACK_FIXTURES = [
   { group: "B", date: "2026-06-12", time: "15:00", home: "Canada", away: "Bosnia and Herzegovina", homeScore: 1, awayScore: 1, status: "FT" },
   { group: "D", date: "2026-06-12", time: "21:00", home: "USA", away: "Paraguay", homeScore: 4, awayScore: 1, status: "FT" },
   { group: "B", date: "2026-06-13", time: "15:00", home: "Qatar", away: "Switzerland", homeScore: 1, awayScore: 1, status: "FT" },
-  { group: "C", date: "2026-06-13", time: "18:00", home: "Brazil", away: "Morocco", homeScore: null, awayScore: null, status: "NS" },
-  { group: "C", date: "2026-06-13", time: "21:00", home: "Haiti", away: "Scotland", homeScore: null, awayScore: null, status: "NS" },
-  { group: "D", date: "2026-06-13", time: "00:00", home: "Australia", away: "Türkiye", homeScore: null, awayScore: null, status: "NS" },
+  { group: "C", date: "2026-06-13", time: "18:00", home: "Brazil", away: "Morocco", homeScore: 1, awayScore: 1, status: "FT" },
+  { group: "C", date: "2026-06-13", time: "21:00", home: "Haiti", away: "Scotland", homeScore: 0, awayScore: 1, status: "FT" },
+  { group: "D", date: "2026-06-13", time: "00:00", home: "Australia", away: "Türkiye", homeScore: 2, awayScore: 0, status: "FT" },
   { group: "E", date: "2026-06-14", time: "13:00", home: "Germany", away: "Curaçao", homeScore: null, awayScore: null, status: "NS" },
   { group: "F", date: "2026-06-14", time: "16:00", home: "Netherlands", away: "Japan", homeScore: null, awayScore: null, status: "NS" },
   { group: "E", date: "2026-06-14", time: "19:00", home: "Ivory Coast", away: "Ecuador", homeScore: null, awayScore: null, status: "NS" },
@@ -120,11 +121,11 @@ const FALLBACK_STANDINGS = {
     { team: "Qatar", pts: 1 }, { team: "Switzerland", pts: 1 },
   ],
   C: [
-    { team: "Brazil", pts: 0 }, { team: "Morocco", pts: 0 },
-    { team: "Scotland", pts: 0 }, { team: "Haiti", pts: 0 },
+    { team: "Scotland", pts: 3 }, { team: "Brazil", pts: 1 },
+    { team: "Morocco", pts: 1 }, { team: "Haiti", pts: 0 },
   ],
   D: [
-    { team: "USA", pts: 3 }, { team: "Australia", pts: 0 },
+    { team: "USA", pts: 3 }, { team: "Australia", pts: 3 },
     { team: "Türkiye", pts: 0 }, { team: "Paraguay", pts: 0 },
   ],
   E: [
@@ -164,6 +165,7 @@ const FALLBACK_STANDINGS = {
 let state = {
   fixtures: [...FALLBACK_FIXTURES],
   standings: structuredClone(FALLBACK_STANDINGS),
+  teamLookup: {},
   activeFilter: null,
   lastUpdated: null,
   dataSource: "local",
@@ -349,16 +351,22 @@ async function fetchLiveData() {
   btn.disabled = true;
 
   try {
-    const [gamesRes, groupsRes] = await Promise.allSettled([
+    const [teamsRes, gamesRes, groupsRes] = await Promise.allSettled([
+      fetch("https://worldcup26.ir/get/teams", { signal: AbortSignal.timeout(8000) }),
       fetch("https://worldcup26.ir/get/games", { signal: AbortSignal.timeout(8000) }),
       fetch("https://worldcup26.ir/get/groups", { signal: AbortSignal.timeout(8000) }),
     ]);
 
     let updated = false;
 
+    if (teamsRes.status === "fulfilled" && teamsRes.value.ok) {
+      const teams = await teamsRes.value.json();
+      state.teamLookup = buildTeamLookup(teams);
+    }
+
     if (gamesRes.status === "fulfilled" && gamesRes.value.ok) {
       const games = await gamesRes.value.json();
-      const parsed = parseApiGames(games);
+      const parsed = parseApiGames(games, state.teamLookup);
       if (parsed.length) {
         state.fixtures = mergeFixtures(FALLBACK_FIXTURES, parsed);
         updated = true;
@@ -367,9 +375,9 @@ async function fetchLiveData() {
 
     if (groupsRes.status === "fulfilled" && groupsRes.value.ok) {
       const groups = await groupsRes.value.json();
-      const parsed = parseApiStandings(groups);
+      const parsed = parseApiStandings(groups, state.teamLookup);
       if (parsed) {
-        state.standings = parsed;
+        state.standings = mergeStandings(FALLBACK_STANDINGS, parsed);
         updated = true;
       }
     }
@@ -386,29 +394,54 @@ async function fetchLiveData() {
   }
 }
 
-function parseApiGames(data) {
+function buildTeamLookup(data) {
+  const list = Array.isArray(data) ? data : data?.teams || data?.data || [];
+  const lookup = {};
+  for (const t of list) {
+    const name = t.name_en || t.name || t.teamName || "";
+    const id = String(t.id ?? t._id ?? t.team_id ?? "");
+    if (id && name) lookup[id] = normalizeTeam(name);
+  }
+  return lookup;
+}
+
+function parseApiGames(data, teamLookup = {}) {
   const list = Array.isArray(data) ? data : data?.games || data?.matches || data?.data || [];
   if (!Array.isArray(list) || !list.length) return [];
 
   return list.map((g) => {
-    const home = normalizeTeam(g.homeTeam?.name || g.home_team || g.homeTeam || g.team1 || g.home || "");
-    const away = normalizeTeam(g.awayTeam?.name || g.away_team || g.awayTeam || g.team2 || g.away || "");
-    const homeScore = numOrNull(g.homeScore ?? g.home_score ?? g.score?.home ?? g.goals?.home);
-    const awayScore = numOrNull(g.awayScore ?? g.away_score ?? g.score?.away ?? g.goals?.away);
+    const home = normalizeTeam(
+      g.home_team_name_en || g.homeTeam?.name || teamLookup[String(g.home_team_id)] || g.home_team || g.homeTeam || g.team1 || g.home || ""
+    );
+    const away = normalizeTeam(
+      g.away_team_name_en || g.awayTeam?.name || teamLookup[String(g.away_team_id)] || g.away_team || g.awayTeam || g.team2 || g.away || ""
+    );
+    const homeScore = numOrNull(g.home_score ?? g.homeScore ?? g.score?.home ?? g.goals?.home);
+    const awayScore = numOrNull(g.away_score ?? g.awayScore ?? g.score?.away ?? g.goals?.away);
     let status = g.status || g.state || "NS";
     if (typeof status === "object") status = status.short || status.long || "NS";
+    if (g.finished === "TRUE" || g.finished === true) status = "FT";
     if (homeScore != null && awayScore != null && /finished|ft|complete/i.test(String(status))) status = "FT";
+
+    let date = (g.date || g.matchDate || g.datetime || "").slice(0, 10);
+    let time = (g.time || g.matchTime || "").slice(0, 5) || "00:00";
+    if (g.local_date) {
+      const [mdy, hm] = g.local_date.split(" ");
+      if (mdy) {
+        const [mm, dd, yyyy] = mdy.split("/");
+        if (yyyy && mm && dd) date = `${yyyy}-${mm.padStart(2, "0")}-${dd.padStart(2, "0")}`;
+      }
+      if (hm) time = hm.slice(0, 5);
+    }
 
     return {
       group: (g.group || g.groupName || g.stage || "?").toString().replace(/group\s*/i, "").toUpperCase().slice(-1) || "?",
-      date: (g.date || g.matchDate || g.datetime || "").slice(0, 10),
-      time: (g.time || g.matchTime || "").slice(0, 5) || "00:00",
-      home, away, homeScore, awayScore, status,
+      date, time, home, away, homeScore, awayScore, status,
     };
   }).filter((f) => f.home && f.away);
 }
 
-function parseApiStandings(data) {
+function parseApiStandings(data, teamLookup = {}) {
   const groups = Array.isArray(data) ? data : data?.groups || data?.data || null;
   if (!Array.isArray(groups)) return null;
 
@@ -417,12 +450,34 @@ function parseApiStandings(data) {
     const key = (g.name || g.group || g.groupName || "").replace(/group\s*/i, "").toUpperCase().slice(-1);
     const teams = g.teams || g.standings || g.table || [];
     if (!key || !Array.isArray(teams)) continue;
-    result[key] = teams.map((t) => ({
-      team: normalizeTeam(t.name || t.team || t.teamName || ""),
-      pts: t.points ?? t.pts ?? t.PTS ?? 0,
-    }));
+    result[key] = teams.map((t) => {
+      const rawName = t.name || t.team || t.teamName || t.name_en || teamLookup[String(t.team_id)] || "";
+      return {
+        team: normalizeTeam(rawName),
+        pts: numOrNull(t.points ?? t.pts ?? t.PTS) ?? 0,
+      };
+    }).filter((row) => row.team);
   }
   return Object.keys(result).length ? result : null;
+}
+
+function mergeStandings(fallback, live) {
+  const merged = structuredClone(fallback);
+  for (const [group, rows] of Object.entries(live)) {
+    if (!merged[group]) {
+      merged[group] = rows;
+      continue;
+    }
+    for (const liveRow of rows) {
+      const existing = merged[group].find((r) => normalizeTeam(r.team) === normalizeTeam(liveRow.team));
+      if (existing) {
+        existing.pts = liveRow.pts;
+      } else {
+        merged[group].push({ ...liveRow });
+      }
+    }
+  }
+  return merged;
 }
 
 function numOrNull(v) {
