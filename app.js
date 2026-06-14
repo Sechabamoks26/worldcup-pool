@@ -1,12 +1,12 @@
 const PARTICIPANTS = {
-  "Sandile Duba": ["Portugal", "Ecuador", "Belgium"],
-  Dofa: ["Scotland", "Morocco", "Spain"],
-  Phillip: ["Senegal", "USA", "Netherlands"],
-  Kekesto: ["Argentina", "IR Iran", "South Africa"],
-  Latita: ["Australia", "France", "Canada"],
-  Lwandle: ["Ghana", "Korea Republic", "Brazil"],
-  Sechaba: ["Colombia", "Germany", "Norway"],
-  Thato: ["Mexico", "England", "Qatar"],
+  "Sandile Duba": ["Portugal", "Ecuador", "Belgium", "Saudi Arabia", "Algeria", "Czechia"],
+  Dofa: ["Scotland", "Morocco", "Spain", "Paraguay", "Egypt", "New Zealand"],
+  Phillip: ["Senegal", "USA", "Netherlands", "Curaçao", "Croatia", "Jordan"],
+  Kekesto: ["Argentina", "IR Iran", "South Africa", "Tunisia", "Cape Verde", "Panama"],
+  Latita: ["Australia", "France", "Canada", "Sweden", "DR Congo", "Switzerland"],
+  Lwandle: ["Ghana", "Korea Republic", "Brazil", "Uruguay", "Ivory Coast", "Austria"],
+  Sechaba: ["Colombia", "Germany", "Norway", "Iraq", "Türkiye", "Bosnia and Herzegovina"],
+  Thato: ["Mexico", "England", "Qatar", "Haiti", "Japan", "Uzbekistan"],
 };
 
 const TEAM_ALIASES = {
