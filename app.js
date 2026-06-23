@@ -177,6 +177,18 @@ const FALLBACK_STANDINGS = {
   ],
 };
 
+const LIVE_STATUSES = new Set(["LIVE", "1H", "2H", "HT", "ET", "P"]);
+const POLL = {
+  LIVE: 30_000,
+  POST_MATCH: 15_000,
+  PRE_KICKOFF: 45_000,
+  IDLE: 5 * 60_000,
+};
+
+let pollTimer = null;
+let postMatchBurstTimers = [];
+let fetchInProgress = false;
+
 let state = {
   fixtures: [...FALLBACK_FIXTURES],
   standings: structuredClone(FALLBACK_STANDINGS),
@@ -184,6 +196,8 @@ let state = {
   activeFilter: null,
   lastUpdated: null,
   dataSource: "local",
+  postMatchActive: false,
+  refreshNote: null,
 };
 
 const $ = (sel) => document.querySelector(sel);
@@ -359,13 +373,94 @@ function renderCards() {
   }).join("");
 }
 
+function isLiveFixture(fixture) {
+  return LIVE_STATUSES.has(fixture.status);
+}
+
+function hasLiveFixtures() {
+  return state.fixtures.some(isLiveFixture);
+}
+
+function minutesUntilNextMatch() {
+  const now = Date.now();
+  let nearest = Infinity;
+  for (const fixture of state.fixtures) {
+    if (fixture.status !== "NS") continue;
+    const kickoff = new Date(`${fixture.date}T${fixture.time || "00:00"}:00`).getTime();
+    if (kickoff > now && kickoff - now < nearest) nearest = kickoff - now;
+  }
+  return nearest === Infinity ? null : nearest / 60_000;
+}
+
+function getPollIntervalMs() {
+  if (hasLiveFixtures()) return POLL.LIVE;
+  if (state.postMatchActive) return POLL.POST_MATCH;
+  const mins = minutesUntilNextMatch();
+  if (mins != null && mins <= 30) return POLL.PRE_KICKOFF;
+  return POLL.IDLE;
+}
+
+function detectNewlyFinished(before, after) {
+  if (!before) return [];
+  const prevByKey = new Map(before.map((f) => [fixtureKey(f), f]));
+  return after.filter((f) => {
+    const prev = prevByKey.get(fixtureKey(f));
+    return prev && prev.status !== "FT" && f.status === "FT";
+  });
+}
+
+function clearPostMatchBurst() {
+  for (const id of postMatchBurstTimers) clearTimeout(id);
+  postMatchBurstTimers = [];
+}
+
+function triggerPostMatchBurst(finished) {
+  clearPostMatchBurst();
+  state.postMatchActive = true;
+  const label = finished.map((f) => `${f.home} ${f.homeScore}–${f.awayScore} ${f.away}`).join(", ");
+  state.refreshNote = `Full time · updating standings (${label})`;
+  renderMeta();
+
+  for (const delay of [15_000, 45_000, 120_000, 300_000]) {
+    postMatchBurstTimers.push(setTimeout(() => fetchLiveData({ auto: true }), delay));
+  }
+  postMatchBurstTimers.push(setTimeout(() => {
+    state.postMatchActive = false;
+    state.refreshNote = null;
+    renderMeta();
+    schedulePoll();
+  }, 5 * 60_000));
+}
+
+function schedulePoll() {
+  clearTimeout(pollTimer);
+  pollTimer = setTimeout(async () => {
+    await fetchLiveData({ auto: true });
+    schedulePoll();
+  }, getPollIntervalMs());
+}
+
 function renderMeta() {
   const el = $("#lastUpdated");
+  const parts = [];
+
+  if (fetchInProgress) parts.push("Updating…");
+  else if (state.refreshNote) parts.push(state.refreshNote);
+  else if (hasLiveFixtures()) parts.push("Live match in progress");
+
   if (state.lastUpdated) {
-    el.textContent = `${state.dataSource === "live" ? "Live" : "Local"} · ${state.lastUpdated.toLocaleTimeString()}`;
+    parts.push(`${state.dataSource === "live" ? "Live" : "Local"} · ${state.lastUpdated.toLocaleTimeString()}`);
   } else {
-    el.textContent = "Local data";
+    parts.push("Local data");
   }
+
+  const interval = getPollIntervalMs();
+  if (state.dataSource === "live" && interval < POLL.IDLE) {
+    parts.push(`next refresh ${Math.round(interval / 1000)}s`);
+  }
+
+  el.textContent = parts.join(" · ");
+  el.classList.toggle("header__updated--live", hasLiveFixtures() || state.postMatchActive || fetchInProgress);
 }
 
 function renderAll() {
@@ -375,9 +470,21 @@ function renderAll() {
   renderMeta();
 }
 
-async function fetchLiveData() {
+async function fetchLiveData({ auto = false } = {}) {
+  if (fetchInProgress) {
+    if (auto) schedulePoll();
+    return;
+  }
+  fetchInProgress = true;
+
   const btn = $("#refreshBtn");
   btn.disabled = true;
+  if (!auto) {
+    state.refreshNote = null;
+  }
+  renderMeta();
+
+  const fixturesBefore = state.fixtures.map((f) => ({ ...f }));
 
   try {
     const [teamsRes, gamesRes, groupsRes] = await Promise.allSettled([
@@ -414,12 +521,21 @@ async function fetchLiveData() {
     if (updated) {
       state.dataSource = "live";
       state.lastUpdated = new Date();
+
+      const newlyFinished = detectNewlyFinished(fixturesBefore, state.fixtures);
+      if (newlyFinished.length) {
+        triggerPostMatchBurst(newlyFinished);
+      } else if (state.postMatchActive && !state.refreshNote) {
+        state.postMatchActive = false;
+      }
     }
   } catch {
     // keep fallback data
   } finally {
+    fetchInProgress = false;
     btn.disabled = false;
     renderAll();
+    if (auto) schedulePoll();
   }
 }
 
@@ -560,14 +676,23 @@ function setupShare() {
   });
 }
 
-$("#refreshBtn").addEventListener("click", fetchLiveData);
+$("#refreshBtn").addEventListener("click", () => {
+  clearTimeout(pollTimer);
+  fetchLiveData().then(() => schedulePoll());
+});
 $("#showAllBtn").addEventListener("click", () => {
   state.activeFilter = null;
   renderAll();
 });
 
+document.addEventListener("visibilitychange", () => {
+  if (document.visibilityState === "visible") {
+    clearTimeout(pollTimer);
+    fetchLiveData({ auto: true });
+  }
+});
+
 renderAll();
 validateParticipantGroups();
 setupShare();
-fetchLiveData();
-setInterval(fetchLiveData, 5 * 60 * 1000);
+fetchLiveData({ auto: true });

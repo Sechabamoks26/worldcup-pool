@@ -125,6 +125,16 @@ body {
   color: var(--muted);
 }
 
+.header__updated--live {
+  color: var(--live);
+  animation: pulse-live 2s ease-in-out infinite;
+}
+
+@keyframes pulse-live {
+  0%, 100% { opacity: 1; }
+  50% { opacity: 0.65; }
+}
+
 .layout {
   position: relative;
   z-index: 1;
