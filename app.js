@@ -1,11 +1,11 @@
 const PARTICIPANTS = {
-  "Sandile Duba": ["Portugal", "Ecuador", "Belgium", "Saudi Arabia", "Jordan", "Czechia"],
+  "Sandile Duba": ["Portugal", "Ecuador", "Belgium", "Saudi Arabia", "Algeria", "Czechia"],
   Dofa: ["Scotland", "Senegal", "Spain", "Paraguay", "Egypt", "Switzerland"],
   Phillip: ["Morocco", "USA", "Netherlands", "Curaçao", "Panama", "Austria"],
   Kekesto: ["Argentina", "IR Iran", "South Africa", "Tunisia", "Cape Verde", "Croatia"],
   Latita: ["Australia", "France", "Canada", "New Zealand", "DR Congo", "Sweden"],
   Lwandle: ["Ghana", "Korea Republic", "Brazil", "Uruguay", "Ivory Coast", "Uzbekistan"],
-  Sechaba: ["Colombia", "Germany", "Norway", "Algeria", "Türkiye", "Qatar"],
+  Sechaba: ["Colombia", "Germany", "Norway", "Jordan", "Türkiye", "Qatar"],
   Thato: ["Mexico", "England", "Bosnia and Herzegovina", "Haiti", "Japan", "Iraq"],
 };
 
@@ -60,42 +60,42 @@ const FALLBACK_FIXTURES = [
   { group: "C", date: "2026-06-13", time: "18:00", home: "Brazil", away: "Morocco", homeScore: 1, awayScore: 1, status: "FT" },
   { group: "C", date: "2026-06-13", time: "21:00", home: "Haiti", away: "Scotland", homeScore: 0, awayScore: 1, status: "FT" },
   { group: "D", date: "2026-06-13", time: "00:00", home: "Australia", away: "Türkiye", homeScore: 2, awayScore: 0, status: "FT" },
-  { group: "E", date: "2026-06-14", time: "13:00", home: "Germany", away: "Curaçao", homeScore: null, awayScore: null, status: "NS" },
-  { group: "F", date: "2026-06-14", time: "16:00", home: "Netherlands", away: "Japan", homeScore: null, awayScore: null, status: "NS" },
-  { group: "E", date: "2026-06-14", time: "19:00", home: "Ivory Coast", away: "Ecuador", homeScore: null, awayScore: null, status: "NS" },
-  { group: "F", date: "2026-06-14", time: "22:00", home: "Sweden", away: "Tunisia", homeScore: null, awayScore: null, status: "NS" },
-  { group: "G", date: "2026-06-15", time: "15:00", home: "Belgium", away: "Egypt", homeScore: null, awayScore: null, status: "NS" },
-  { group: "H", date: "2026-06-15", time: "12:00", home: "Spain", away: "Cape Verde", homeScore: null, awayScore: null, status: "NS" },
-  { group: "H", date: "2026-06-15", time: "18:00", home: "Saudi Arabia", away: "Uruguay", homeScore: null, awayScore: null, status: "NS" },
-  { group: "G", date: "2026-06-15", time: "21:00", home: "IR Iran", away: "New Zealand", homeScore: null, awayScore: null, status: "NS" },
-  { group: "I", date: "2026-06-16", time: "15:00", home: "France", away: "Senegal", homeScore: null, awayScore: null, status: "NS" },
-  { group: "I", date: "2026-06-16", time: "18:00", home: "Iraq", away: "Norway", homeScore: null, awayScore: null, status: "NS" },
-  { group: "J", date: "2026-06-16", time: "21:00", home: "Argentina", away: "Algeria", homeScore: null, awayScore: null, status: "NS" },
-  { group: "J", date: "2026-06-16", time: "00:00", home: "Austria", away: "Jordan", homeScore: null, awayScore: null, status: "NS" },
-  { group: "K", date: "2026-06-17", time: "13:00", home: "Portugal", away: "DR Congo", homeScore: null, awayScore: null, status: "NS" },
-  { group: "L", date: "2026-06-17", time: "16:00", home: "England", away: "Croatia", homeScore: null, awayScore: null, status: "NS" },
-  { group: "L", date: "2026-06-17", time: "19:00", home: "Ghana", away: "Panama", homeScore: null, awayScore: null, status: "NS" },
-  { group: "K", date: "2026-06-17", time: "22:00", home: "Uzbekistan", away: "Colombia", homeScore: null, awayScore: null, status: "NS" },
-  { group: "A", date: "2026-06-18", time: "12:00", home: "Czechia", away: "South Africa", homeScore: null, awayScore: null, status: "NS" },
-  { group: "B", date: "2026-06-18", time: "15:00", home: "Switzerland", away: "Bosnia and Herzegovina", homeScore: null, awayScore: null, status: "NS" },
-  { group: "B", date: "2026-06-18", time: "18:00", home: "Canada", away: "Qatar", homeScore: null, awayScore: null, status: "NS" },
-  { group: "A", date: "2026-06-18", time: "21:00", home: "Mexico", away: "Korea Republic", homeScore: null, awayScore: null, status: "NS" },
-  { group: "C", date: "2026-06-19", time: "18:00", home: "Scotland", away: "Morocco", homeScore: null, awayScore: null, status: "NS" },
-  { group: "D", date: "2026-06-19", time: "15:00", home: "USA", away: "Australia", homeScore: null, awayScore: null, status: "NS" },
-  { group: "C", date: "2026-06-19", time: "21:00", home: "Brazil", away: "Haiti", homeScore: null, awayScore: null, status: "NS" },
-  { group: "D", date: "2026-06-19", time: "00:00", home: "Türkiye", away: "Paraguay", homeScore: null, awayScore: null, status: "NS" },
-  { group: "E", date: "2026-06-20", time: "16:00", home: "Germany", away: "Ivory Coast", homeScore: null, awayScore: null, status: "NS" },
-  { group: "F", date: "2026-06-20", time: "13:00", home: "Netherlands", away: "Sweden", homeScore: null, awayScore: null, status: "NS" },
-  { group: "E", date: "2026-06-20", time: "20:00", home: "Ecuador", away: "Curaçao", homeScore: null, awayScore: null, status: "NS" },
-  { group: "F", date: "2026-06-20", time: "00:00", home: "Tunisia", away: "Japan", homeScore: null, awayScore: null, status: "NS" },
-  { group: "H", date: "2026-06-21", time: "12:00", home: "Spain", away: "Saudi Arabia", homeScore: null, awayScore: null, status: "NS" },
-  { group: "G", date: "2026-06-21", time: "15:00", home: "Belgium", away: "IR Iran", homeScore: null, awayScore: null, status: "NS" },
-  { group: "H", date: "2026-06-21", time: "18:00", home: "Uruguay", away: "Cape Verde", homeScore: null, awayScore: null, status: "NS" },
-  { group: "G", date: "2026-06-21", time: "21:00", home: "New Zealand", away: "Egypt", homeScore: null, awayScore: null, status: "NS" },
-  { group: "I", date: "2026-06-22", time: "17:00", home: "France", away: "Iraq", homeScore: null, awayScore: null, status: "NS" },
-  { group: "J", date: "2026-06-22", time: "13:00", home: "Argentina", away: "Austria", homeScore: null, awayScore: null, status: "NS" },
-  { group: "I", date: "2026-06-22", time: "20:00", home: "Norway", away: "Senegal", homeScore: null, awayScore: null, status: "NS" },
-  { group: "J", date: "2026-06-22", time: "23:00", home: "Jordan", away: "Algeria", homeScore: null, awayScore: null, status: "NS" },
+  { group: "E", date: "2026-06-14", time: "13:00", home: "Germany", away: "Curaçao", homeScore: 7, awayScore: 1, status: "FT" },
+  { group: "F", date: "2026-06-14", time: "16:00", home: "Netherlands", away: "Japan", homeScore: 2, awayScore: 2, status: "FT" },
+  { group: "E", date: "2026-06-14", time: "19:00", home: "Ivory Coast", away: "Ecuador", homeScore: 1, awayScore: 0, status: "FT" },
+  { group: "F", date: "2026-06-14", time: "22:00", home: "Sweden", away: "Tunisia", homeScore: 5, awayScore: 1, status: "FT" },
+  { group: "G", date: "2026-06-15", time: "15:00", home: "Belgium", away: "Egypt", homeScore: 1, awayScore: 1, status: "FT" },
+  { group: "H", date: "2026-06-15", time: "12:00", home: "Spain", away: "Cape Verde", homeScore: 0, awayScore: 0, status: "FT" },
+  { group: "H", date: "2026-06-15", time: "18:00", home: "Saudi Arabia", away: "Uruguay", homeScore: 1, awayScore: 1, status: "FT" },
+  { group: "G", date: "2026-06-15", time: "21:00", home: "IR Iran", away: "New Zealand", homeScore: 2, awayScore: 2, status: "FT" },
+  { group: "I", date: "2026-06-16", time: "15:00", home: "France", away: "Senegal", homeScore: 3, awayScore: 1, status: "FT" },
+  { group: "I", date: "2026-06-16", time: "18:00", home: "Iraq", away: "Norway", homeScore: 1, awayScore: 4, status: "FT" },
+  { group: "J", date: "2026-06-16", time: "21:00", home: "Argentina", away: "Algeria", homeScore: 3, awayScore: 0, status: "FT" },
+  { group: "J", date: "2026-06-16", time: "00:00", home: "Austria", away: "Jordan", homeScore: 3, awayScore: 1, status: "FT" },
+  { group: "K", date: "2026-06-17", time: "13:00", home: "Portugal", away: "DR Congo", homeScore: 1, awayScore: 1, status: "FT" },
+  { group: "L", date: "2026-06-17", time: "16:00", home: "England", away: "Croatia", homeScore: 4, awayScore: 2, status: "FT" },
+  { group: "L", date: "2026-06-17", time: "19:00", home: "Ghana", away: "Panama", homeScore: 1, awayScore: 0, status: "FT" },
+  { group: "K", date: "2026-06-17", time: "22:00", home: "Uzbekistan", away: "Colombia", homeScore: 1, awayScore: 3, status: "FT" },
+  { group: "A", date: "2026-06-18", time: "12:00", home: "Czechia", away: "South Africa", homeScore: 1, awayScore: 1, status: "FT" },
+  { group: "B", date: "2026-06-18", time: "15:00", home: "Switzerland", away: "Bosnia and Herzegovina", homeScore: 4, awayScore: 1, status: "FT" },
+  { group: "B", date: "2026-06-18", time: "18:00", home: "Canada", away: "Qatar", homeScore: 6, awayScore: 0, status: "FT" },
+  { group: "A", date: "2026-06-18", time: "21:00", home: "Mexico", away: "Korea Republic", homeScore: 1, awayScore: 0, status: "FT" },
+  { group: "C", date: "2026-06-19", time: "18:00", home: "Scotland", away: "Morocco", homeScore: 0, awayScore: 1, status: "FT" },
+  { group: "D", date: "2026-06-19", time: "15:00", home: "USA", away: "Australia", homeScore: 2, awayScore: 0, status: "FT" },
+  { group: "C", date: "2026-06-19", time: "21:00", home: "Brazil", away: "Haiti", homeScore: 3, awayScore: 0, status: "FT" },
+  { group: "D", date: "2026-06-19", time: "00:00", home: "Türkiye", away: "Paraguay", homeScore: 0, awayScore: 1, status: "FT" },
+  { group: "E", date: "2026-06-20", time: "16:00", home: "Germany", away: "Ivory Coast", homeScore: 2, awayScore: 1, status: "FT" },
+  { group: "F", date: "2026-06-20", time: "13:00", home: "Netherlands", away: "Sweden", homeScore: 5, awayScore: 1, status: "FT" },
+  { group: "E", date: "2026-06-20", time: "20:00", home: "Ecuador", away: "Curaçao", homeScore: 0, awayScore: 0, status: "FT" },
+  { group: "F", date: "2026-06-20", time: "00:00", home: "Tunisia", away: "Japan", homeScore: 0, awayScore: 4, status: "FT" },
+  { group: "H", date: "2026-06-21", time: "12:00", home: "Spain", away: "Saudi Arabia", homeScore: 4, awayScore: 0, status: "FT" },
+  { group: "G", date: "2026-06-21", time: "15:00", home: "Belgium", away: "IR Iran", homeScore: 0, awayScore: 0, status: "FT" },
+  { group: "H", date: "2026-06-21", time: "18:00", home: "Uruguay", away: "Cape Verde", homeScore: 2, awayScore: 2, status: "FT" },
+  { group: "G", date: "2026-06-21", time: "21:00", home: "New Zealand", away: "Egypt", homeScore: 1, awayScore: 3, status: "FT" },
+  { group: "I", date: "2026-06-22", time: "17:00", home: "France", away: "Iraq", homeScore: 3, awayScore: 0, status: "FT" },
+  { group: "J", date: "2026-06-22", time: "13:00", home: "Argentina", away: "Austria", homeScore: 2, awayScore: 0, status: "FT" },
+  { group: "I", date: "2026-06-22", time: "20:00", home: "Norway", away: "Senegal", homeScore: 3, awayScore: 2, status: "FT" },
+  { group: "J", date: "2026-06-22", time: "23:00", home: "Jordan", away: "Algeria", homeScore: 1, awayScore: 2, status: "FT" },
   { group: "K", date: "2026-06-23", time: "13:00", home: "Portugal", away: "Uzbekistan", homeScore: null, awayScore: null, status: "NS" },
   { group: "L", date: "2026-06-23", time: "16:00", home: "England", away: "Ghana", homeScore: null, awayScore: null, status: "NS" },
   { group: "L", date: "2026-06-23", time: "19:00", home: "Panama", away: "Croatia", homeScore: null, awayScore: null, status: "NS" },
@@ -128,52 +128,52 @@ const FALLBACK_FIXTURES = [
 
 const FALLBACK_STANDINGS = {
   A: [
-    { team: "Mexico", pts: 3 }, { team: "Korea Republic", pts: 3 },
-    { team: "Czechia", pts: 0 }, { team: "South Africa", pts: 0 },
+    { team: "Mexico", pts: 6 }, { team: "Korea Republic", pts: 3 },
+    { team: "Czechia", pts: 1 }, { team: "South Africa", pts: 1 },
   ],
   B: [
-    { team: "Canada", pts: 1 }, { team: "Bosnia and Herzegovina", pts: 1 },
-    { team: "Qatar", pts: 1 }, { team: "Switzerland", pts: 1 },
+    { team: "Canada", pts: 4 }, { team: "Switzerland", pts: 4 },
+    { team: "Bosnia and Herzegovina", pts: 1 }, { team: "Qatar", pts: 0 },
   ],
   C: [
-    { team: "Scotland", pts: 3 }, { team: "Brazil", pts: 1 },
-    { team: "Morocco", pts: 1 }, { team: "Haiti", pts: 0 },
+    { team: "Brazil", pts: 4 }, { team: "Morocco", pts: 4 },
+    { team: "Scotland", pts: 3 }, { team: "Haiti", pts: 0 },
   ],
   D: [
-    { team: "USA", pts: 3 }, { team: "Australia", pts: 3 },
-    { team: "Türkiye", pts: 0 }, { team: "Paraguay", pts: 0 },
+    { team: "USA", pts: 6 }, { team: "Australia", pts: 3 },
+    { team: "Paraguay", pts: 3 }, { team: "Türkiye", pts: 0 },
   ],
   E: [
-    { team: "Germany", pts: 0 }, { team: "Ecuador", pts: 0 },
-    { team: "Ivory Coast", pts: 0 }, { team: "Curaçao", pts: 0 },
+    { team: "Germany", pts: 6 }, { team: "Ivory Coast", pts: 3 },
+    { team: "Ecuador", pts: 1 }, { team: "Curaçao", pts: 1 },
   ],
   F: [
-    { team: "Netherlands", pts: 0 }, { team: "Japan", pts: 0 },
-    { team: "Sweden", pts: 0 }, { team: "Tunisia", pts: 0 },
+    { team: "Netherlands", pts: 4 }, { team: "Japan", pts: 4 },
+    { team: "Sweden", pts: 3 }, { team: "Tunisia", pts: 0 },
   ],
   G: [
-    { team: "Belgium", pts: 0 }, { team: "IR Iran", pts: 0 },
-    { team: "Egypt", pts: 0 }, { team: "New Zealand", pts: 0 },
+    { team: "Egypt", pts: 4 }, { team: "Belgium", pts: 2 },
+    { team: "IR Iran", pts: 2 }, { team: "New Zealand", pts: 1 },
   ],
   H: [
-    { team: "Spain", pts: 0 }, { team: "Uruguay", pts: 0 },
-    { team: "Saudi Arabia", pts: 0 }, { team: "Cape Verde", pts: 0 },
+    { team: "Spain", pts: 4 }, { team: "Uruguay", pts: 2 },
+    { team: "Cape Verde", pts: 2 }, { team: "Saudi Arabia", pts: 1 },
   ],
   I: [
-    { team: "France", pts: 0 }, { team: "Senegal", pts: 0 },
-    { team: "Norway", pts: 0 }, { team: "Iraq", pts: 0 },
+    { team: "France", pts: 6 }, { team: "Norway", pts: 6 },
+    { team: "Senegal", pts: 0 }, { team: "Iraq", pts: 0 },
   ],
   J: [
-    { team: "Argentina", pts: 0 }, { team: "Austria", pts: 0 },
-    { team: "Algeria", pts: 0 }, { team: "Jordan", pts: 0 },
+    { team: "Argentina", pts: 6 }, { team: "Algeria", pts: 3 },
+    { team: "Austria", pts: 3 }, { team: "Jordan", pts: 0 },
   ],
   K: [
-    { team: "Portugal", pts: 0 }, { team: "Colombia", pts: 0 },
-    { team: "DR Congo", pts: 0 }, { team: "Uzbekistan", pts: 0 },
+    { team: "Colombia", pts: 3 }, { team: "Portugal", pts: 1 },
+    { team: "DR Congo", pts: 1 }, { team: "Uzbekistan", pts: 0 },
   ],
   L: [
-    { team: "England", pts: 0 }, { team: "Croatia", pts: 0 },
-    { team: "Ghana", pts: 0 }, { team: "Panama", pts: 0 },
+    { team: "England", pts: 3 }, { team: "Ghana", pts: 3 },
+    { team: "Croatia", pts: 0 }, { team: "Panama", pts: 0 },
   ],
 };
 
@@ -417,8 +417,12 @@ function clearPostMatchBurst() {
 function triggerPostMatchBurst(finished) {
   clearPostMatchBurst();
   state.postMatchActive = true;
-  const label = finished.map((f) => `${f.home} ${f.homeScore}–${f.awayScore} ${f.away}`).join(", ");
-  state.refreshNote = `Full time · updating standings (${label})`;
+  if (finished.length === 1) {
+    const f = finished[0];
+    state.refreshNote = `Full time: ${f.home} ${f.homeScore}–${f.awayScore} ${f.away}`;
+  } else {
+    state.refreshNote = `Full time · ${finished.length} matches · updating standings`;
+  }
   renderMeta();
 
   for (const delay of [15_000, 45_000, 120_000, 300_000]) {
